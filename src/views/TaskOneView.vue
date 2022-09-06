@@ -1,5 +1,10 @@
 <template>
-    <div class="about">
-        <h1>This is page for a first task</h1>
-    </div>
-</template>;
+    <q-page padding>
+        <TaskOne></TaskOne>
+    </q-page>
+</template>
+
+<script setup lang="ts">
+import TaskOne from '@/components/TaskOne.vue';
+
+</script>
