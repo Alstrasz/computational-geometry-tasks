@@ -10,11 +10,13 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.8.3",
+    "events": "^3.3.0",
     "quasar": "^2.0.0",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"
   },
   "devDependencies": {
+    "@types/events": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@typescript-eslint/parser": "^5.35.1",
     "@vue/cli-plugin-babel": "~5.0.0",
