@@ -1,18 +1,17 @@
 <template>
-    <div class="home">
-        <img alt="Vue logo" src="../assets/logo.png">
-        <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-    </div>
+    <q-page padding>
+        <article class="text-h6">Project containing university tasks for computational geometry. Completed tasks:</article>
+        <q-list>
+            <q-item>
+                <q-item-section>
+                    <q-item-label>Dot localization</q-item-label>
+                    <q-item-label caption lines="2" class="text-white">Check if dot is inside a polygon</q-item-label>
+                </q-item-section>
+            </q-item>
+        </q-list>
+    </q-page>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+<script lang="ts" setup>
 
-export default defineComponent( {
-    name: 'HomeView',
-    components: {
-        HelloWorld,
-    },
-} );
 </script>

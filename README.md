@@ -1,24 +1,22 @@
-# computational-geometry-tasks
+# Description
 
-## Project setup
-```
-npm install
-```
+Project containing university tasks for computational geometry
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+- Task #1 - Dot localization
+    - Check if dot is inside a polygon
 
-### Compiles and minifies for production
-```
-npm run build
-```
+# Used technologies
 
-### Lints and fixes files
-```
-npm run lint
-```
+- Vue
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# How to run
+
+## With node
+
+Requiers postgres to be launched, setting passed as env variables. See ./docker-compose.yml as example.
+
+For dev
+
+From project's root folder:
+- ```npm i```
+- ```npm run serve```

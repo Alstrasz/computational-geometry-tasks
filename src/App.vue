@@ -31,7 +31,7 @@
                         <q-icon name="home" />
                     </q-item-section>
                     <q-item-section>
-                        <q-item-label>Docs</q-item-label>
+                        <q-item-label>Home</q-item-label>
                     </q-item-section>
                 </q-item>
                 <q-item clickable tag="a" to="/task1" active-class="text-accent">
@@ -40,6 +40,7 @@
                     </q-item-section>
                     <q-item-section>
                         <q-item-label>Task #1</q-item-label>
+                        <q-item-label caption class="text-white">Dot localization</q-item-label>
                     </q-item-section>
                 </q-item>
             </q-list>
@@ -53,7 +54,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
 
 const leftDrawerOpen = ref( true );
 </script>

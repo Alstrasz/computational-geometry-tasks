@@ -6,7 +6,7 @@
     </q-card-section>
 
     <q-card-section>
-        <p>
+        <p v-bind:class="{ 'text-positive': dot_inside, 'text-negative': !dot_inside, }">
             Dot inside: {{dot_inside}}
         </p>
     </q-card-section>
