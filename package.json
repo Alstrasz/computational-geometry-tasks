@@ -11,12 +11,16 @@
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.8.3",
     "events": "^3.3.0",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "quasar": "^2.0.0",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"
   },
   "devDependencies": {
     "@types/events": "^3.0.0",
+    "@types/lodash": "^4.14.184",
+    "@types/lodash-es": "^4.17.6",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@typescript-eslint/parser": "^5.35.1",
     "@vue/cli-plugin-babel": "~5.0.0",

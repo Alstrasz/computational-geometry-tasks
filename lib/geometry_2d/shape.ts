@@ -14,7 +14,7 @@ export class Shape implements SceneElement {
     constructor( center: Dot2d, num_vertices: number, radius: number, irregularity: number, spikeness: number, color?: Color );
     constructor ( center_or_vertices: Dot2d | Array<Dot2d>, num_vertices_or_color?: number | Color, radius?: number, irregularity?: number, spikeness?: number, color?: Color ) {
         if ( Array.isArray( center_or_vertices ) ) {
-            this.from_vertices( this.vertices );
+            this.from_vertices( center_or_vertices );
             this.color = num_vertices_or_color as Color | undefined;
         } else {
             this.from_gen_random( center_or_vertices, num_vertices_or_color as number, radius as number, irregularity as number, spikeness as number );

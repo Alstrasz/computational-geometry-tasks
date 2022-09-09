@@ -25,7 +25,6 @@ export class CanvasBrush implements Brush {
     }
 
     fill_all ( color: Color ): void {
-        this.context.fillStyle = 'this.color_type_to_string( color )';
         this.context.clearRect( 0, 0, this.width, this.height );
     }
 
