@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { Dot2d } from './dot_2d';
+import { Dot2d } from './scene_element/dot_2d';
 import { Brush } from './interfaces/brush';
 import { SceneElement } from './interfaces/scene_element';
 import { SceneSelectedVertex } from './types/scene_selected_vertex';

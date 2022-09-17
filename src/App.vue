@@ -43,6 +43,15 @@
                         <q-item-label caption class="text-white">Dot localization</q-item-label>
                     </q-item-section>
                 </q-item>
+                <q-item clickable tag="a" to="/task2" active-class="text-accent">
+                    <q-item-section avatar>
+                        <q-icon name="task2" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label>Task #2</q-item-label>
+                        <q-item-label caption class="text-white">Dot count</q-item-label>
+                    </q-item-section>
+                </q-item>
             </q-list>
         </q-drawer>
 

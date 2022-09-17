@@ -37,7 +37,7 @@
 </style>
 
 <script setup lang="ts">
-import { Dot2d } from '../../lib/geometry_2d/dot_2d';
+import { Dot2d } from '../../lib/geometry_2d/scene_element/dot_2d';
 import { Ref, ref } from 'vue';
 import { cloneDeep } from 'lodash-es';
 
@@ -47,6 +47,7 @@ const canvas = ref<HTMLCanvasElement>( null as never );
 const props = defineProps( {
     canvas_width: Number,
     canvas_height: Number,
+    dotst_only: Boolean,
     modelValue: Boolean,
 } );
 
@@ -73,6 +74,14 @@ function draw_dots () {
         throw new Error( 'Canvas contex undefined' );
     }
     ctx.clearRect( 0, 0, props.canvas_width || 512, props.canvas_height || 512 );
+    if ( props.dotst_only ) {
+        for ( let i = 0; i < dots.value.length; i ++ ) {
+            ctx.fillStyle = 'black';
+            ctx.fillRect( dots.value[i].x - 1, dots.value[i].y - 1, 3, 3 );
+        }
+        return;
+    }
+
     if ( dots.value.length > 1 ) {
         for ( let i = 0; i < dots.value.length - 1; i ++ ) {
             ctx.strokeStyle = 'blue';

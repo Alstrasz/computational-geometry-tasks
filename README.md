@@ -5,6 +5,9 @@ Project containing university tasks for computational geometry
 - Task #1 - Dot localization
     - Check if dot is inside a polygon
 
+- Task #2 - Dot count
+    - Count number of dots inside rectangle
+
 # Used technologies
 
 - Vue

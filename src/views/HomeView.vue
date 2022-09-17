@@ -8,6 +8,12 @@
                     <q-item-label caption lines="2" class="text-white">Check if dot is inside a polygon</q-item-label>
                 </q-item-section>
             </q-item>
+            <q-item>
+                <q-item-section>
+                    <q-item-label>Dot count</q-item-label>
+                    <q-item-label caption lines="2" class="text-white">Count number of dots inside of rectangle</q-item-label>
+                </q-item-section>
+            </q-item>
         </q-list>
     </q-page>
 </template>

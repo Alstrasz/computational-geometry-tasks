@@ -1,5 +1,5 @@
 import { CanvasBrush } from './canvas_brush';
-import { Dot2d } from './dot_2d';
+import { Dot2d } from './scene_element/dot_2d';
 import { Scene } from './scene';
 import { SceneSelectedVertex } from './types/scene_selected_vertex';
 

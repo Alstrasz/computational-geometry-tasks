@@ -13,7 +13,7 @@
 
     <q-card-actions>
         <q-btn color="accent" label="Create custom shape" class="text-capitalize" @click="input_shape_dialog_active = true" />
-        <ShapeInput v-model="input_shape_dialog_active" @created:shape="set_shape($event)"></ShapeInput>
+        <ShapeInput v-model="input_shape_dialog_active" @created:shape="set_shape($event)" :dotst_only="false"></ShapeInput>
     </q-card-actions>
 </template>
 
@@ -25,9 +25,9 @@
 
 <script setup lang="ts">
 import { CanvasScene } from '../../lib/geometry_2d/canvas_scene';
-import { onDeactivated, onMounted, ref } from 'vue';
-import { Shape } from '../../lib/geometry_2d/shape';
-import { Dot2d } from '../../lib/geometry_2d/dot_2d';
+import { onBeforeUnmount, onDeactivated, onMounted, ref } from 'vue';
+import { Shape } from '../../lib/geometry_2d/scene_element/shape';
+import { Dot2d } from '../../lib/geometry_2d/scene_element/dot_2d';
 import ShapeInput from './ShapeInput.vue';
 
 const canvas = ref<HTMLCanvasElement>( null as never );
@@ -50,7 +50,7 @@ onMounted( () => {
     } );
 } );
 
-onDeactivated( () => {
+onBeforeUnmount( () => {
     scene?.destroy();
 } );
 

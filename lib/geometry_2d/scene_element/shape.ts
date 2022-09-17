@@ -1,9 +1,9 @@
-import { Brush } from './interfaces/brush';
-import { SceneElement } from './interfaces/scene_element';
+import { Brush } from '../interfaces/brush';
+import { SceneElement } from '../interfaces/scene_element';
 import { Dot2d } from './dot_2d';
-import { Color } from './types/color';
-import { Dot2dPolar } from './dot_2d_polar';
-import { horizontal_ray_with_segment_intersection } from './helpers';
+import { Color } from '../types/color';
+import { Dot2dPolar } from '../dot_2d_polar';
+import { horizontal_ray_with_segment_intersection } from '../helpers';
 
 export class Shape implements SceneElement {
     private vertices!: Array<Dot2d>;

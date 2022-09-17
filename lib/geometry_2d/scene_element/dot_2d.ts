@@ -1,7 +1,7 @@
-import { Dot2dPolar } from './dot_2d_polar';
-import { Brush } from './interfaces/brush';
-import { SceneElement } from './interfaces/scene_element';
-import { Color } from './types/color';
+import { Dot2dPolar } from '../dot_2d_polar';
+import { Brush } from '../interfaces/brush';
+import { SceneElement } from '../interfaces/scene_element';
+import { Color } from '../types/color';
 
 export class Dot2d extends SceneElement {
     constructor (

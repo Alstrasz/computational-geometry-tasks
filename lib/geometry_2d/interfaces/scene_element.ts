@@ -1,4 +1,4 @@
-import { Dot2d } from '../dot_2d';
+import { Dot2d } from '../scene_element/dot_2d';
 import { Brush } from './brush';
 
 export abstract class SceneElement {
