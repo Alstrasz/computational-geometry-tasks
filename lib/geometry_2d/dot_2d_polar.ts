@@ -11,8 +11,8 @@ export class Dot2dPolar {
             center = new Dot2d( 0, 0 );
         }
         return new Dot2d(
-            this.r * Math.cos( this.phi ),
-            this.r * Math.sin( this.phi ),
+            Math.floor( this.r * Math.cos( this.phi ) ),
+            Math.floor( this.r * Math.sin( this.phi ) ),
         )
             .add( center );
     }

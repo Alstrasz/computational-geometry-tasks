@@ -1,20 +1,33 @@
 <template>
-    <q-card-section>
-        <div>
-            <canvas ref="canvas" class="canvas bg-blue-grey-14" :width="CANVAS_W" :height="CANVAS_H"></canvas>
-        </div>
-    </q-card-section>
+    <div style="width: min-content;">
+        <q-card-section>
+            <div>
+                <canvas ref="canvas" class="canvas bg-blue-grey-14" :width="CANVAS_W" :height="CANVAS_H"></canvas>
+            </div>
+        </q-card-section>
 
-    <q-card-section>
-        <p>
-            Dots inside: {{dot_count}}
-        </p>
-    </q-card-section>
+        <q-card-section>
+            <p>
+                Dots inside: {{dot_count}}
+            </p>
+            <div>
+                <q-toggle
+                    v-model="rect_edit_mode"
+                    @update:model-value="update_rect_mode()"
+                    label="Recangle edit mode"
+                    left-label
+                />
+            </div>
+        </q-card-section>
 
-    <q-card-actions>
-        <q-btn color="accent" label="Create custom dots" class="text-capitalize" @click="input_shape_dialog_active = true" />
-        <ShapeInput v-model="input_shape_dialog_active" @created:shape="set_shape($event)" :dotst_only="true" :canvas_width="CANVAS_W" :canvas_height="CANVAS_H"></ShapeInput>
-    </q-card-actions>
+        <q-card-actions>
+            <div>
+                <q-btn color="accent" label="Create custom dots" class="text-capitalize" @click="input_shape_dialog_active = true" />
+                <ShapeInput v-model="input_shape_dialog_active" @created:shape="set_shape($event)" :dotst_only="true" :canvas_width="CANVAS_W" :canvas_height="CANVAS_H"></ShapeInput>
+
+            </div>
+        </q-card-actions>
+    </div>
 </template>
 
 <style>
@@ -25,7 +38,7 @@
 
 <script setup lang="ts">
 import { CanvasScene } from '../../lib/geometry_2d/canvas_scene';
-import { onBeforeUnmount, onDeactivated, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { Dot2d } from '../../lib/geometry_2d/scene_element/dot_2d';
 import ShapeInput from './ShapeInput.vue';
 import { Dot2dCollection } from '../../lib/geometry_2d/scene_element/dot_2d_collection';
@@ -38,6 +51,7 @@ const canvas = ref<HTMLCanvasElement>( null as never );
 let scene: CanvasScene | undefined = undefined;
 const dot_count = ref( 0 );
 const input_shape_dialog_active = ref( false );
+const rect_edit_mode = ref( true );
 
 const dt: Array<Dot2d> = [];
 for ( let i = 0; i < 20; i++ ) {
@@ -45,18 +59,24 @@ for ( let i = 0; i < 20; i++ ) {
 }
 
 let dot_collection = new Dot2dCollection( dt, { r: 255, g: 0, b: 0 } );
-const rect = new Rectangle( new Dot2d( 128, 128 ), new Dot2d( 256, 256 ), { r: 0, g: 255, b: 0 } );
+const rect = new Rectangle(
+    new Dot2d( Math.floor( CANVAS_W.value / 4 ), Math.floor( CANVAS_H.value / 4 ) ),
+    new Dot2d( Math.floor( CANVAS_W.value / 2 ), Math.floor( CANVAS_H.value / 2 ) ),
+    rect_edit_mode.value,
+    { r: 0, g: 255, b: 0 },
+);
 
 onMounted( () => {
     console.log( canvas.value );
     scene = new CanvasScene( canvas.value );
 
     scene.add_element( dot_collection, 'dot_collection' );
-    scene.add_element( rect );
+    scene.add_element( rect, 'rect' );
 
-    scene.on( 'draw', () => {
-        dot_count.value = dot_collection.count_dots_in_rectangle( rect.left_bot_vetex, rect.right_top_vetex );
+    scene.on( 'vertex_moved', () => {
+        dot_count.value = dot_collection.count_dots_in_rectangle( rect );
     } );
+    dot_count.value = dot_collection.count_dots_in_rectangle( rect );
 } );
 
 onBeforeUnmount( () => {
@@ -68,4 +88,9 @@ function set_shape ( dots: Array<Dot2d> ) {
     dot_collection = new Dot2dCollection( dots, { r: 255, g: 0, b: 0 } );
     scene?.add_element( dot_collection, 'dot_collection' );
 }
+
+function update_rect_mode () {
+    rect.set_edit_mode( rect_edit_mode.value );
+}
+
 </script>

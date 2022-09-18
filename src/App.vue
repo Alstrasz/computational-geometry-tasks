@@ -52,6 +52,15 @@
                         <q-item-label caption class="text-white">Dot count</q-item-label>
                     </q-item-section>
                 </q-item>
+                <q-item clickable tag="a" to="/task3" active-class="text-accent">
+                    <q-item-section avatar>
+                        <q-icon name="task3" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label>Task #3</q-item-label>
+                        <q-item-label caption class="text-white">Random shape</q-item-label>
+                    </q-item-section>
+                </q-item>
             </q-list>
         </q-drawer>
 

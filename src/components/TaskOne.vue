@@ -9,6 +9,12 @@
         <p v-bind:class="{ 'text-positive': dot_inside, 'text-negative': !dot_inside, }">
             Dot inside: {{dot_inside}}
         </p>
+        <p>
+            Shape vertices: {{shape_dots_pos_string}}
+        </p>
+        <p>
+            Dot position: {{dot_pos_string}}
+        </p>
     </q-card-section>
 
     <q-card-actions>
@@ -37,6 +43,8 @@ const input_shape_dialog_active = ref( false );
 
 let shape = new Shape( new Dot2d( 256, 256 ), 16, 128, 0.2, 0.6, { r: 0, g: 0, b: 255 } );
 const dot = new Dot2d( 256, 256, { r: 0, g: 255, b: 0 } );
+const shape_dots_pos_string = ref( JSON.stringify( shape.array_short() ) );
+const dot_pos_string = ref( `[${dot.x}, ${dot.y}]` );
 
 onMounted( () => {
     console.log( canvas.value );
@@ -45,9 +53,12 @@ onMounted( () => {
     scene.add_element( shape, 'shape_base' );
     scene.add_element( dot );
 
-    scene.on( 'draw', () => {
+    scene.on( 'vertex_moved', () => {
         dot_inside.value = shape.is_dot_inside( dot );
+        shape_dots_pos_string.value = JSON.stringify( shape.array_short() );
+        dot_pos_string.value = `[${dot.x}, ${dot.y}]`;
     } );
+    dot_inside.value = shape.is_dot_inside( dot );
 } );
 
 onBeforeUnmount( () => {

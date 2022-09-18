@@ -57,7 +57,10 @@ export class CanvasScene extends Scene {
         return { width: rect.width, height: rect.height };
     }
 
-    on ( type: 'draw', func: () => void ) {
+    on( type: 'vertex_moved', func: ( selector: SceneSelectedVertex, to: Dot2d ) => void ): void;
+    on ( type: 'draw', func: () => void ): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    on ( type: string, func: ( ...args: any[] ) => void ) {
         this.event_emmiter.addListener( type, func );
     }
 }

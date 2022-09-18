@@ -3,6 +3,7 @@ import { Brush } from '../interfaces/brush';
 import { SceneElement } from '../interfaces/scene_element';
 import { Color } from '../types/color';
 import { cloneDeep, range, sortedIndex } from 'lodash-es';
+import { Rectangle } from './rectangle';
 
 
 export class Dot2dCollection implements SceneElement {
@@ -50,13 +51,29 @@ export class Dot2dCollection implements SceneElement {
         this.y_index_sorted = this.y_index_sorted.map( ( v ) => this.dots[v].y );
     }
 
-    count_dots_in_rectangle ( left_bot: Dot2d, right_top: Dot2d ) {
-        const lbx = sortedIndex( this.x_index_sorted, left_bot.x );
-        const lby = sortedIndex( this.y_index_sorted, left_bot.y );
-        const rtx = sortedIndex( this.x_index_sorted, right_top.x );
-        const rty = sortedIndex( this.y_index_sorted, right_top.y );
-
-        // console.log( left_bot, right_top, lbx, lby, rtx, rty, this.x_index_sorted, this.y_index_sorted, this.precomputed_dots_count );
+    count_dots_in_rectangle ( rect: Rectangle ): number;
+    count_dots_in_rectangle ( left_bot: Dot2d, right_top: Dot2d ): number;
+    count_dots_in_rectangle ( left_bot_or_rect: Dot2d | Rectangle, right_top?: Dot2d ) {
+        let lb: Dot2d;
+        let rt: Dot2d;
+        if ( right_top ) {
+            lb = left_bot_or_rect as Dot2d;
+            rt = right_top;
+        } else {
+            const rect = left_bot_or_rect as Rectangle;
+            lb = new Dot2d(
+                rect.vetex_1.x < rect.vetex_2.x ? rect.vetex_1.x : rect.vetex_2.x,
+                rect.vetex_1.y < rect.vetex_2.y ? rect.vetex_1.y : rect.vetex_2.y,
+            );
+            rt = new Dot2d(
+                rect.vetex_1.x > rect.vetex_2.x ? rect.vetex_1.x : rect.vetex_2.x,
+                rect.vetex_1.y > rect.vetex_2.y ? rect.vetex_1.y : rect.vetex_2.y,
+            );
+        }
+        const lbx = sortedIndex( this.x_index_sorted, lb.x );
+        const lby = sortedIndex( this.y_index_sorted, lb.y );
+        const rtx = sortedIndex( this.x_index_sorted, rt.x );
+        const rty = sortedIndex( this.y_index_sorted, rt.y );
 
         return this.precomputed_dots_count[rtx][rty] + this.precomputed_dots_count[lbx][lby] - this.precomputed_dots_count[lbx][rty] - this.precomputed_dots_count[rtx][lby];
     }

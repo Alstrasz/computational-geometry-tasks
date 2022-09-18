@@ -79,6 +79,9 @@ export class Scene {
     }
 
     move_vertex ( selector: SceneSelectedVertex, to: Dot2d ) {
-        this.elements[selector.elem_name]?.set_vertex( selector.vertex_id, to );
+        if ( this.elements[selector.elem_name] ) {
+            this.elements[selector.elem_name].set_vertex( selector.vertex_id, to );
+            this.event_emmiter.emit( 'vertex_moved', selector, to );
+        }
     }
 }

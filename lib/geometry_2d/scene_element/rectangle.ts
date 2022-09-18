@@ -6,32 +6,33 @@ import { Dot2d } from './dot_2d';
 
 export class Rectangle implements SceneElement {
     constructor (
-        public left_bot_vetex: Dot2d,
-        public right_top_vetex: Dot2d,
+        public vetex_1: Dot2d,
+        public vetex_2: Dot2d,
+        private edit_mode: boolean = true,
         public color?: Color,
     ) {}
 
     draw ( brush: Brush ): void {
-        const lt = new Dot2d( this.left_bot_vetex.x, this.right_top_vetex.y );
-        const rb = new Dot2d( this.right_top_vetex.x, this.left_bot_vetex.y );
-        brush.draw_line( this.left_bot_vetex, lt, this.color );
-        brush.draw_line( this.left_bot_vetex, rb, this.color );
-        brush.draw_line( this.right_top_vetex, lt, this.color );
-        brush.draw_line( this.right_top_vetex, rb, this.color );
+        const lt = new Dot2d( this.vetex_1.x, this.vetex_2.y );
+        const rb = new Dot2d( this.vetex_2.x, this.vetex_1.y );
+        brush.draw_line( this.vetex_1, lt, this.color );
+        brush.draw_line( this.vetex_1, rb, this.color );
+        brush.draw_line( this.vetex_2, lt, this.color );
+        brush.draw_line( this.vetex_2, rb, this.color );
     }
 
     closest_vertex ( pos: Dot2d ): { id: number; distance: number; } {
-        const lt = new Dot2d( this.left_bot_vetex.x, this.right_top_vetex.y );
-        const rb = new Dot2d( this.right_top_vetex.x, this.left_bot_vetex.y );
+        const lt = new Dot2d( this.vetex_1.x, this.vetex_2.y );
+        const rb = new Dot2d( this.vetex_2.x, this.vetex_1.y );
 
         const ret = {
             id: 0,
-            distance: pos.distance_to( this.left_bot_vetex ),
+            distance: pos.distance_to( this.vetex_1 ),
         };
 
-        if ( pos.distance_to( this.right_top_vetex ) < ret.distance ) {
+        if ( pos.distance_to( this.vetex_2 ) < ret.distance ) {
             ret.id = 1;
-            ret.distance = pos.distance_to( this.right_top_vetex );
+            ret.distance = pos.distance_to( this.vetex_2 );
         }
 
         if ( pos.distance_to( lt ) < ret.distance ) {
@@ -52,21 +53,41 @@ export class Rectangle implements SceneElement {
             throw new Error( 'Vertex id out of range' );
         }
 
+        if ( this.edit_mode ) {
+            if ( vertex_id === 0 ) {
+                this.vetex_1.set( target );
+            } else if ( vertex_id === 1 ) {
+                this.vetex_2.set( target );
+            } else if ( vertex_id === 2 ) {
+                this.vetex_1.set( new Dot2d( target.x, this.vetex_1.y ) );
+                this.vetex_2.set( new Dot2d( this.vetex_2.x, target.y ) );
+            } else {
+                this.vetex_1.set( new Dot2d( this.vetex_1.x, target.y ) );
+                this.vetex_2.set( new Dot2d( target.x, this.vetex_2.y ) );
+            }
+
+            return;
+        }
+
         let dv: Dot2d;
 
         if ( vertex_id === 0 ) {
-            dv = target.sub( this.left_bot_vetex );
+            dv = target.sub( this.vetex_1 );
         } else if ( vertex_id === 1 ) {
-            dv = target.sub( this.right_top_vetex );
+            dv = target.sub( this.vetex_2 );
         } else if ( vertex_id === 2 ) {
-            const lt = new Dot2d( this.left_bot_vetex.x, this.right_top_vetex.y );
+            const lt = new Dot2d( this.vetex_1.x, this.vetex_2.y );
             dv = target.sub( lt );
         } else {
-            const rb = new Dot2d( this.right_top_vetex.x, this.left_bot_vetex.y );
+            const rb = new Dot2d( this.vetex_2.x, this.vetex_1.y );
             dv = target.sub( rb );
         }
 
-        this.left_bot_vetex.set( this.left_bot_vetex.add( dv ) );
-        this.right_top_vetex.set( this.right_top_vetex.add( dv ) );
+        this.vetex_1.set( this.vetex_1.add( dv ) );
+        this.vetex_2.set( this.vetex_2.add( dv ) );
+    }
+
+    set_edit_mode ( val: boolean ) {
+        this.edit_mode = val;
     }
 }

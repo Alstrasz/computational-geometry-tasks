@@ -74,4 +74,8 @@ export class Shape implements SceneElement {
         }
         this.vertices[vertex_id].set( target );
     }
+
+    array_short (): Array<[number, number]> {
+        return this.vertices.map( ( val ) => [val.x, val.y] );
+    }
 }

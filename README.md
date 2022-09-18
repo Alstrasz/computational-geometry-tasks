@@ -8,6 +8,9 @@ Project containing university tasks for computational geometry
 - Task #2 - Dot count
     - Count number of dots inside rectangle
 
+- Random shape
+    - Generate random shape by distorting right shape
+
 # Used technologies
 
 - Vue
