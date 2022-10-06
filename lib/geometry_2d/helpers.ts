@@ -43,3 +43,9 @@ export function line_intersection ( l1_d1: Dot2d, l1_d2: Dot2d, l2_d1: Dot2d, l2
 
     return new Dot2d( apply_t( t, l1_d1.x, l1_d2.x ), apply_t( t, l1_d1.y, l1_d2.y ) );
 }
+
+export function vect_2d_mult ( a: Dot2d, b: Dot2d, origin: Dot2d = new Dot2d( 0, 0 ) ): number {
+    a = a.sub( origin );
+    b = b.sub( origin );
+    return a.x * b.y - a.y * b.x;
+}

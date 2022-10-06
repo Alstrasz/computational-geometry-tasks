@@ -7,7 +7,10 @@
         </q-card-section>
 
         <q-card-section>
-            <q-checkbox v-model="is_convex" label="Is convex" @update:model-value="set_shape()"/>
+            <p v-bind:class="{ 'text-positive': is_convex, 'text-negative': !is_convex, }">
+                Is convex: {{is_convex}}
+            </p>
+            <q-checkbox v-model="generate_convex" label="Generate convex" @update:model-value="set_shape()"/>
             <br>
             <q-badge color="secondary">
                 Radius: {{ rad }}
@@ -54,6 +57,7 @@ const rad = ref( CANVAS_W.value / 4 );
 const vertices_count = ref( 16 );
 const irregularity = ref( 0.2 );
 const spikiness = ref( 0.6 );
+const generate_convex = ref( false );
 const is_convex = ref( false );
 
 const cen = new Dot2d( CANVAS_W.value / 2, CANVAS_H.value / 2 );
@@ -66,9 +70,11 @@ let shape = new Shape(
     rad.value,
     irregularity.value,
     spikiness.value,
-    is_convex.value,
+    generate_convex.value,
     { r: 0, g: 0, b: 255 },
 );
+
+is_convex.value = shape.is_convex();
 
 
 onMounted( () => {
@@ -76,6 +82,10 @@ onMounted( () => {
     scene = new CanvasScene( canvas.value );
 
     scene.add_element( shape, 'shape_base' );
+
+    scene.on( 'vertex_moved', () => {
+        is_convex.value = shape.is_convex();
+    } );
 } );
 
 onBeforeUnmount( () => {
@@ -90,9 +100,10 @@ function set_shape ( ) {
         rad.value,
         irregularity.value,
         spikiness.value,
-        is_convex.value,
+        generate_convex.value,
         { r: 0, g: 0, b: 255 },
     );
     scene?.add_element( shape, 'shape_base' );
+    is_convex.value = shape.is_convex();
 }
 </script>

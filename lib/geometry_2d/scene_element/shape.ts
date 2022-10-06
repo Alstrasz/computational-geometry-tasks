@@ -3,11 +3,11 @@ import { SceneElement } from '../interfaces/scene_element';
 import { Dot2d } from './dot_2d';
 import { Color } from '../types/color';
 import { Dot2dPolar } from '../dot_2d_polar';
-import { horizontal_ray_with_segment_intersection, line_intersection } from '../helpers';
+import { horizontal_ray_with_segment_intersection, line_intersection, vect_2d_mult } from '../helpers';
 
 export class Shape implements SceneElement {
     private vertices!: Array<Dot2d>;
-    public color?: Color;
+    public color: Color;
 
 
     constructor( vertices: Array<Dot2d>, color?: Color );
@@ -15,7 +15,7 @@ export class Shape implements SceneElement {
     constructor ( center_or_vertices: Dot2d | Array<Dot2d>, num_vertices_or_color?: number | Color, radius?: number, irregularity?: number, spikeness?: number, convex?: boolean, color?: Color ) {
         if ( Array.isArray( center_or_vertices ) ) {
             this.from_vertices( center_or_vertices );
-            this.color = num_vertices_or_color as Color | undefined;
+            this.color = num_vertices_or_color as Color | undefined || { r: 0, g: 0, b: 255 };
         } else {
             if ( !convex ) {
                 this.from_gen_random( center_or_vertices, num_vertices_or_color as number, radius as number, irregularity as number, spikeness as number );
@@ -23,17 +23,22 @@ export class Shape implements SceneElement {
                 this.from_gen_convex( center_or_vertices, num_vertices_or_color as number, radius as number, irregularity as number, spikeness as number );
             }
 
-            this.color = color;
+            this.color = color || { r: 0, g: 0, b: 255 };
         }
     }
 
     draw ( brush: Brush ) {
+        const neg_color: Color = { r: 255 - this.color.r, g: 255 - this.color.g, b: 255 - this.color?.b };
         for ( let i = 0; i < this.vertices.length; i ++ ) {
             brush.draw_line( this.vertices[i], this.vertices[( i + 1 ) % this.vertices.length], this.color );
+            brush.draw_point( this.vertices[i], neg_color );
         }
     }
 
     private from_gen_random ( center: Dot2d, num_vertices: number, radius: number, irregularity: number, spikeness: number ) {
+        if ( num_vertices < 3 ) {
+            throw new Error( 'Number of vertcies should be more then 2 for shape' );
+        }
         this.vertices = [];
         for ( let i = 0; i < num_vertices; i++ ) {
             this.vertices.push(
@@ -129,7 +134,7 @@ export class Shape implements SceneElement {
             this.vertices[i] = new Dot2dPolar(
                 min_candidate + Math.random() * ( max_candidate - min_candidate ),
                 this.vertices[i].to_polar( center ).phi,
-            ).to_cartesian( center );
+            ).to_cartesian( center, true );
         }
     }
 
@@ -170,5 +175,21 @@ export class Shape implements SceneElement {
 
     array_short (): Array<[number, number]> {
         return this.vertices.map( ( val ) => [val.x, val.y] );
+    }
+
+    is_convex () {
+        const check = vect_2d_mult( this.vertices[1], this.vertices[2], this.vertices[0] ) < 0;
+
+        for ( let i = 0; i < this.vertices.length; i ++ ) {
+            const c = vect_2d_mult(
+                this.vertices[( i + 1 ) % this.vertices.length],
+                this.vertices[( i + 2 )% this.vertices.length],
+                this.vertices[i],
+            ) < 0;
+            if ( check != c ) {
+                return false;
+            }
+        }
+        return true;
     }
 }
