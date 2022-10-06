@@ -8,6 +8,7 @@
 
         <q-card-section>
             <q-checkbox v-model="is_convex" label="Is convex" @update:model-value="set_shape()"/>
+            <br>
             <q-badge color="secondary">
                 Radius: {{ rad }}
             </q-badge>
@@ -16,7 +17,7 @@
             <q-badge color="secondary">
                 Vertices count: {{ vertices_count }}
             </q-badge>
-            <q-slider v-model="vertices_count" :min="4" :max="320" @update:model-value="set_shape()"/>
+            <q-slider v-model="vertices_count" :min="4" :max="64" @update:model-value="set_shape()"/>
 
             <q-badge color="secondary">
                 Irregularity: {{ irregularity }}

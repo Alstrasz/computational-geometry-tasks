@@ -6,14 +6,18 @@ export class Dot2dPolar {
         public phi: number,
     ) {}
 
-    to_cartesian ( center?: Dot2d ): Dot2d {
+    to_cartesian ( center?: Dot2d, not_floored?: boolean ): Dot2d {
         if ( !center ) {
             center = new Dot2d( 0, 0 );
         }
-        return new Dot2d(
+        const d = new Dot2d(
             this.r * Math.cos( this.phi ),
             this.r * Math.sin( this.phi ),
         )
             .add( center );
+        if ( !not_floored ) {
+            d.floor();
+        }
+        return d;
     }
 }

@@ -36,6 +36,11 @@ export class Dot2d extends SceneElement {
         return new Dot2d( this.x - dot.x, this.y - dot.y, this.color );
     }
 
+    floor () {
+        this.x = Math.floor( this.x );
+        this.y = Math.floor( this.y );
+    }
+
     draw ( brush: Brush ): void {
         brush.draw_point( this, this.color );
     }

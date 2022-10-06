@@ -62,21 +62,21 @@ export class Shape implements SceneElement {
                 new Dot2dPolar(
                     radius * ( 1 - spikeness ),
                     phi,
-                ).to_cartesian( center ),
+                ).to_cartesian( center, true ),
             );
 
             vertices_max.push(
                 new Dot2dPolar(
                     radius * ( 1 + spikeness ),
                     phi,
-                ).to_cartesian( center ),
+                ).to_cartesian( center, true ),
             );
 
             this.vertices.push(
                 new Dot2dPolar(
                     radius,
                     phi,
-                ).to_cartesian( center ),
+                ).to_cartesian( center, true ),
             );
         }
 
