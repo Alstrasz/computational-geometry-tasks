@@ -49,3 +49,18 @@ export function vect_2d_mult ( a: Dot2d, b: Dot2d, origin: Dot2d = new Dot2d( 0,
     b = b.sub( origin );
     return a.x * b.y - a.y * b.x;
 }
+
+function vect_2d_length ( v: Dot2d ) {
+    return Math.sqrt( v.x * v.x + v.y * v.y );
+}
+
+function vect_2d_dot_product ( v1: Dot2d, v2: Dot2d ) {
+    return v1.x * v2.x + v1.y * v2.y;
+}
+
+export function vect_2d_angle ( a: Dot2d, b: Dot2d, origin: Dot2d = new Dot2d( 0, 0 ) ) {
+    a = a.sub( origin );
+    b = b.sub( origin );
+
+    return Math.acos( vect_2d_dot_product( a, b ) / vect_2d_length( a ) / vect_2d_length( b ) );
+}

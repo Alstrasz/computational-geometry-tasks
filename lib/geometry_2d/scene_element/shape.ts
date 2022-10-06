@@ -3,7 +3,7 @@ import { SceneElement } from '../interfaces/scene_element';
 import { Dot2d } from './dot_2d';
 import { Color } from '../types/color';
 import { Dot2dPolar } from '../dot_2d_polar';
-import { horizontal_ray_with_segment_intersection, line_intersection, vect_2d_mult } from '../helpers';
+import { horizontal_ray_with_segment_intersection, line_intersection, vect_2d_angle, vect_2d_mult } from '../helpers';
 
 export class Shape implements SceneElement {
     private vertices!: Array<Dot2d>;
@@ -142,7 +142,32 @@ export class Shape implements SceneElement {
         this.vertices = vertices;
     }
 
-    is_dot_inside ( dot: Dot2d ) {
+    is_dot_inside ( dot: Dot2d, mode: 'ray' | 'vectors' = 'ray' ): boolean {
+        if ( mode == 'ray' ) {
+            return this.is_dot_inside_by_ray( dot );
+        } else if ( mode == 'vectors' ) {
+            return this.is_dot_inside_by_vectors( dot );
+        }
+        return false;
+    }
+
+    is_dot_inside_by_vectors ( dot: Dot2d ): boolean {
+        let acc = 0;
+        for ( let i = 0; i < this.vertices.length; i ++ ) {
+            acc += Math.sign( vect_2d_mult(
+                this.vertices[i],
+                this.vertices[( i + 1 ) % this.vertices.length],
+                dot,
+            ) ) * vect_2d_angle(
+                this.vertices[i],
+                this.vertices[( i + 1 ) % this.vertices.length],
+                dot,
+            );
+        }
+        return ( Math.abs( Math.abs( acc ) - Math.PI * 2 ) ) < 0.00001;
+    }
+
+    is_dot_inside_by_ray ( dot: Dot2d ): boolean {
         let count = 0;
         for ( let i = 0; i < this.vertices.length; i ++ ) {
             if ( horizontal_ray_with_segment_intersection( dot, this.vertices[i], this.vertices[( i + 1 ) % this.vertices.length] ) ) {
