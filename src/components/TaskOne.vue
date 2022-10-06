@@ -41,7 +41,7 @@ let scene: CanvasScene | undefined = undefined;
 const dot_inside = ref( false );
 const input_shape_dialog_active = ref( false );
 
-let shape = new Shape( new Dot2d( 256, 256 ), 16, 128, 0.2, 0.6, { r: 0, g: 0, b: 255 } );
+let shape = new Shape( new Dot2d( 256, 256 ), 16, 128, 0.2, 0.6, false, { r: 0, g: 0, b: 255 } );
 const dot = new Dot2d( 256, 256, { r: 0, g: 255, b: 0 } );
 const shape_dots_pos_string = ref( JSON.stringify( shape.array_short() ) );
 const dot_pos_string = ref( `[${dot.x}, ${dot.y}]` );

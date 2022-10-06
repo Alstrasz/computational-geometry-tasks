@@ -7,6 +7,7 @@
         </q-card-section>
 
         <q-card-section>
+            <q-checkbox v-model="is_convex" label="Is convex" @update:model-value="set_shape()"/>
             <q-badge color="secondary">
                 Radius: {{ rad }}
             </q-badge>
@@ -15,7 +16,7 @@
             <q-badge color="secondary">
                 Vertices count: {{ vertices_count }}
             </q-badge>
-            <q-slider v-model="vertices_count" :min="3" :max="320" @update:model-value="set_shape()"/>
+            <q-slider v-model="vertices_count" :min="4" :max="320" @update:model-value="set_shape()"/>
 
             <q-badge color="secondary">
                 Irregularity: {{ irregularity }}
@@ -52,6 +53,11 @@ const rad = ref( CANVAS_W.value / 4 );
 const vertices_count = ref( 16 );
 const irregularity = ref( 0.2 );
 const spikiness = ref( 0.6 );
+const is_convex = ref( false );
+
+const cen = new Dot2d( CANVAS_W.value / 2, CANVAS_H.value / 2 );
+console.log( cen, cen.to_polar( ), cen.to_polar( ).to_cartesian( ) );
+console.log( cen, cen.to_polar( cen ), cen.to_polar( cen ).to_cartesian( cen ) );
 
 let shape = new Shape(
     new Dot2d( CANVAS_W.value / 2, CANVAS_H.value / 2 ),
@@ -59,6 +65,7 @@ let shape = new Shape(
     rad.value,
     irregularity.value,
     spikiness.value,
+    is_convex.value,
     { r: 0, g: 0, b: 255 },
 );
 
@@ -82,6 +89,7 @@ function set_shape ( ) {
         rad.value,
         irregularity.value,
         spikiness.value,
+        is_convex.value,
         { r: 0, g: 0, b: 255 },
     );
     scene?.add_element( shape, 'shape_base' );

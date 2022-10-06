@@ -17,8 +17,14 @@ export class Dot2d extends SceneElement {
             center = new Dot2d( 0, 0 );
         }
         const from = this.sub( center );
-        const r = Math.sqrt( this.x * this.x + this.y * this.y );
-        const phi = Math.acos( ( from.x ) / r ) * Math.sign( Math.asin( ( from.y ) / r ) );
+        const r = Math.sqrt( from.x * from.x + from.y * from.y );
+        let phi: number;
+        if ( r != 0 ) {
+            phi = Math.acos( ( from.x ) / r ) * Math.sign( Math.asin( ( from.y ) / r ) );
+        } else {
+            phi = 1;
+        }
+
         return new Dot2dPolar( r, phi );
     }
 
@@ -54,5 +60,22 @@ export class Dot2d extends SceneElement {
             throw new Error( 'Vertex id out of range' );
         }
         this.set( target );
+    }
+
+    is_in_rectangle ( a: Dot2d, b: Dot2d ) {
+        const x_min = a.x < b.x ? a.x : b.x;
+        const x_max = a.x > b.x ? a.x : b.x;
+        const y_min = a.y < b.y ? a.y : b.y;
+        const y_max = a.y > b.y ? a.y : b.y;
+
+        if (
+            this.x > x_max ||
+            this.x < x_min ||
+            this.y > y_max ||
+            this.y < y_min
+        ) {
+            return false;
+        }
+        return true;
     }
 }
