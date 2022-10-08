@@ -142,11 +142,13 @@ export class Shape implements SceneElement {
         this.vertices = vertices;
     }
 
-    is_dot_inside ( dot: Dot2d, mode: 'ray' | 'vectors' = 'ray' ): boolean {
+    is_dot_inside ( dot: Dot2d, mode: 'ray' | 'vectors' | 'convex_vectors' = 'ray' ): boolean {
         if ( mode == 'ray' ) {
             return this.is_dot_inside_by_ray( dot );
         } else if ( mode == 'vectors' ) {
             return this.is_dot_inside_by_vectors( dot );
+        } else if ( mode == 'convex_vectors' ) {
+            return this.is_dot_inside_by_convex_vectors( dot );
         }
         return false;
     }
@@ -175,6 +177,22 @@ export class Shape implements SceneElement {
             }
         }
         return count % 2 === 1;
+    }
+
+    is_dot_inside_by_convex_vectors ( dot: Dot2d ): boolean {
+        const check = vect_2d_mult( dot, this.vertices[1], this.vertices[0] ) < 0;
+
+        for ( let i = 0; i < this.vertices.length; i ++ ) {
+            const c = vect_2d_mult(
+                dot,
+                this.vertices[( i + 1 ) % this.vertices.length],
+                this.vertices[i],
+            ) < 0;
+            if ( check != c ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     closest_vertex ( pos: Dot2d ): { id: number; distance: number; } {
