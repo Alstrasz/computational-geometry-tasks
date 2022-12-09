@@ -41,7 +41,7 @@ import { CanvasScene } from '../../lib/geometry_2d/canvas_scene';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { Dot2d } from '../../lib/geometry_2d/scene_element/dot_2d';
 import ShapeInput from './ShapeInput.vue';
-import { Dot2dCollection } from '../../lib/geometry_2d/scene_element/dot_2d_collection';
+import { Dot2dQuickFindCollection } from '../../lib/geometry_2d/scene_element/dot_2d_collection';
 import { Rectangle } from '../../lib/geometry_2d/scene_element/rectangle';
 
 const CANVAS_W = ref( 512 );
@@ -58,7 +58,7 @@ for ( let i = 0; i < 20; i++ ) {
     dt.push( new Dot2d( Math.floor( Math.random() * CANVAS_W.value ), Math.floor( Math.random() * CANVAS_H.value ) ) );
 }
 
-let dot_collection = new Dot2dCollection( dt, { r: 255, g: 0, b: 0 } );
+let dot_collection = new Dot2dQuickFindCollection( dt, { r: 255, g: 0, b: 0 } );
 const rect = new Rectangle(
     new Dot2d( Math.floor( CANVAS_W.value / 4 ), Math.floor( CANVAS_H.value / 4 ) ),
     new Dot2d( Math.floor( CANVAS_W.value / 2 ), Math.floor( CANVAS_H.value / 2 ) ),
@@ -85,7 +85,7 @@ onBeforeUnmount( () => {
 
 function set_shape ( dots: Array<Dot2d> ) {
     scene?.remove_element( 'dot_collection' );
-    dot_collection = new Dot2dCollection( dots, { r: 255, g: 0, b: 0 } );
+    dot_collection = new Dot2dQuickFindCollection( dots, { r: 255, g: 0, b: 0 } );
     scene?.add_element( dot_collection, 'dot_collection' );
 }
 

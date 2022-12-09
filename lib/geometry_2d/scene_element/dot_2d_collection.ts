@@ -5,8 +5,7 @@ import { Color } from '../types/color';
 import { cloneDeep, range, sortedIndex } from 'lodash-es';
 import { Rectangle } from './rectangle';
 
-
-export class Dot2dCollection implements SceneElement {
+export class Dot2dQuickFindCollection implements SceneElement {
     private dots: Array<Dot2d> = [];
     private precomputed_dots_count: Array<Array<number>> = [];
     private x_index_sorted: Array<number> = [];

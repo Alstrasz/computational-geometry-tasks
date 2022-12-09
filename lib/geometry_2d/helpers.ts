@@ -1,4 +1,3 @@
-import { drop } from 'lodash';
 import { Dot2d } from './scene_element/dot_2d';
 
 export function horizontal_ray_with_segment_intersection (

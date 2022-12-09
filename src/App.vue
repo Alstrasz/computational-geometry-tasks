@@ -61,6 +61,15 @@
                         <q-item-label caption class="text-white">Random shape</q-item-label>
                     </q-item-section>
                 </q-item>
+                <q-item clickable tag="a" to="/task4" active-class="text-accent">
+                    <q-item-section avatar>
+                        <q-icon name="task4" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label>Task #4</q-item-label>
+                        <q-item-label caption class="text-white">Convex hull</q-item-label>
+                    </q-item-section>
+                </q-item>
             </q-list>
         </q-drawer>
 

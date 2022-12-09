@@ -8,6 +8,7 @@ import { horizontal_ray_with_segment_intersection, line_intersection, vect_2d_an
 export class Shape implements SceneElement {
     private vertices!: Array<Dot2d>;
     public color: Color;
+    public interactive: boolean = true;
 
 
     constructor( vertices: Array<Dot2d>, color?: Color );
@@ -196,6 +197,9 @@ export class Shape implements SceneElement {
     }
 
     closest_vertex ( pos: Dot2d ): { id: number; distance: number; } {
+        if ( !this.interactive ) {
+            return { id: -1, distance: 100000 };
+        }
         const ret = {
             id: 0,
             distance: pos.distance_to( this.vertices[0] ),

@@ -29,6 +29,7 @@ module.exports = {
         'no-unused-vars': 'off',
         'no-throw-literal': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-inferrable-types': 'off',
         'require-jsdoc': ['error', {
             require: {
                 FunctionDeclaration: false,

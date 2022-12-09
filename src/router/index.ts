@@ -22,6 +22,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'task3',
         component: () => import( /* webpackChunkName: "about" */ '../views/TaskThreeView.vue' ),
     },
+    {
+        path: '/task4',
+        name: 'task4',
+        component: () => import( /* webpackChunkName: "about" */ '../views/TaskFour.vue' ),
+    },
 ];
 
 const router = createRouter( {
