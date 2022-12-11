@@ -239,4 +239,12 @@ export class Shape implements SceneElement {
         }
         return true;
     }
+
+    to_simple_object (): Array<{x: number, y: number}> {
+        const ret: Array<{x: number, y: number}> = [];
+        for ( const dot of this.vertices ) {
+            ret.push( { x: dot.x, y: dot.y } );
+        }
+        return ret;
+    }
 }

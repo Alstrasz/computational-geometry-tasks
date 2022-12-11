@@ -7,4 +7,6 @@ export abstract class SceneElement {
     abstract closest_vertex ( pos: Dot2d ): { id: number, distance: number }
 
     abstract set_vertex ( vertex_id: number, target: Dot2d ): void;
+
+    abstract to_simple_object (): unknown;
 }

@@ -6,33 +6,33 @@ import { Dot2d } from './dot_2d';
 
 export class Rectangle implements SceneElement {
     constructor (
-        public vetex_1: Dot2d,
-        public vetex_2: Dot2d,
+        public vertex_1: Dot2d,
+        public vertex_2: Dot2d,
         private edit_mode: boolean = true,
         public color?: Color,
     ) {}
 
     draw ( brush: Brush ): void {
-        const lt = new Dot2d( this.vetex_1.x, this.vetex_2.y );
-        const rb = new Dot2d( this.vetex_2.x, this.vetex_1.y );
-        brush.draw_line( this.vetex_1, lt, this.color );
-        brush.draw_line( this.vetex_1, rb, this.color );
-        brush.draw_line( this.vetex_2, lt, this.color );
-        brush.draw_line( this.vetex_2, rb, this.color );
+        const lt = new Dot2d( this.vertex_1.x, this.vertex_2.y );
+        const rb = new Dot2d( this.vertex_2.x, this.vertex_1.y );
+        brush.draw_line( this.vertex_1, lt, this.color );
+        brush.draw_line( this.vertex_1, rb, this.color );
+        brush.draw_line( this.vertex_2, lt, this.color );
+        brush.draw_line( this.vertex_2, rb, this.color );
     }
 
     closest_vertex ( pos: Dot2d ): { id: number; distance: number; } {
-        const lt = new Dot2d( this.vetex_1.x, this.vetex_2.y );
-        const rb = new Dot2d( this.vetex_2.x, this.vetex_1.y );
+        const lt = new Dot2d( this.vertex_1.x, this.vertex_2.y );
+        const rb = new Dot2d( this.vertex_2.x, this.vertex_1.y );
 
         const ret = {
             id: 0,
-            distance: pos.distance_to( this.vetex_1 ),
+            distance: pos.distance_to( this.vertex_1 ),
         };
 
-        if ( pos.distance_to( this.vetex_2 ) < ret.distance ) {
+        if ( pos.distance_to( this.vertex_2 ) < ret.distance ) {
             ret.id = 1;
-            ret.distance = pos.distance_to( this.vetex_2 );
+            ret.distance = pos.distance_to( this.vertex_2 );
         }
 
         if ( pos.distance_to( lt ) < ret.distance ) {
@@ -55,15 +55,15 @@ export class Rectangle implements SceneElement {
 
         if ( this.edit_mode ) {
             if ( vertex_id === 0 ) {
-                this.vetex_1.set( target );
+                this.vertex_1.set( target );
             } else if ( vertex_id === 1 ) {
-                this.vetex_2.set( target );
+                this.vertex_2.set( target );
             } else if ( vertex_id === 2 ) {
-                this.vetex_1.set( new Dot2d( target.x, this.vetex_1.y ) );
-                this.vetex_2.set( new Dot2d( this.vetex_2.x, target.y ) );
+                this.vertex_1.set( new Dot2d( target.x, this.vertex_1.y ) );
+                this.vertex_2.set( new Dot2d( this.vertex_2.x, target.y ) );
             } else {
-                this.vetex_1.set( new Dot2d( this.vetex_1.x, target.y ) );
-                this.vetex_2.set( new Dot2d( target.x, this.vetex_2.y ) );
+                this.vertex_1.set( new Dot2d( this.vertex_1.x, target.y ) );
+                this.vertex_2.set( new Dot2d( target.x, this.vertex_2.y ) );
             }
 
             return;
@@ -72,22 +72,31 @@ export class Rectangle implements SceneElement {
         let dv: Dot2d;
 
         if ( vertex_id === 0 ) {
-            dv = target.sub( this.vetex_1 );
+            dv = target.sub( this.vertex_1 );
         } else if ( vertex_id === 1 ) {
-            dv = target.sub( this.vetex_2 );
+            dv = target.sub( this.vertex_2 );
         } else if ( vertex_id === 2 ) {
-            const lt = new Dot2d( this.vetex_1.x, this.vetex_2.y );
+            const lt = new Dot2d( this.vertex_1.x, this.vertex_2.y );
             dv = target.sub( lt );
         } else {
-            const rb = new Dot2d( this.vetex_2.x, this.vetex_1.y );
+            const rb = new Dot2d( this.vertex_2.x, this.vertex_1.y );
             dv = target.sub( rb );
         }
 
-        this.vetex_1.set( this.vetex_1.add( dv ) );
-        this.vetex_2.set( this.vetex_2.add( dv ) );
+        this.vertex_1.set( this.vertex_1.add( dv ) );
+        this.vertex_2.set( this.vertex_2.add( dv ) );
     }
 
     set_edit_mode ( val: boolean ) {
         this.edit_mode = val;
+    }
+
+    to_simple_object (): Array<{x: number, y: number}> {
+        const ret: Array<{x: number, y: number}> = [];
+        ret.push( { x: this.vertex_1.x, y: this.vertex_1.y } );
+        ret.push( { x: this.vertex_2.x, y: this.vertex_2.y } );
+        ret.push( { x: this.vertex_1.x, y: this.vertex_2.y } );
+        ret.push( { x: this.vertex_2.x, y: this.vertex_1.y } );
+        return ret;
     }
 }

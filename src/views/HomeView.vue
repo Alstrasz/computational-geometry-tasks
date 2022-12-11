@@ -20,6 +20,18 @@
                     <q-item-label caption lines="2" class="text-white">Generate random shape by distorting right shape</q-item-label>
                 </q-item-section>
             </q-item>
+            <q-item>
+                <q-item-section>
+                    <q-item-label>Convex hull</q-item-label>
+                    <q-item-label caption lines="2" class="text-white">Generate convex hull from dots collection</q-item-label>
+                </q-item-section>
+            </q-item>
+            <q-item>
+                <q-item-section>
+                    <q-item-label>Multiple shapes editor</q-item-label>
+                    <q-item-label caption lines="2" class="text-white">Editor for creating and modifying multiple shapes</q-item-label>
+                </q-item-section>
+            </q-item>
         </q-list>
     </q-page>
 </template>

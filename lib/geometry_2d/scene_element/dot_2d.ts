@@ -83,4 +83,8 @@ export class Dot2d extends SceneElement {
         }
         return true;
     }
+
+    to_simple_object (): {x: number, y: number} {
+        return { x: this.x, y: this.y };
+    }
 }

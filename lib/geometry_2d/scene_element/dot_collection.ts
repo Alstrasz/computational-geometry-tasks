@@ -146,45 +146,45 @@ export class DotCollection implements SceneElement {
 
         ret.push( sorted_dots[0] );
 
-        let min_phi_dot = minBy( sorted_dots, ( a: Dot2d ) => {
-            return a.to_polar( new Dot2d( ret[0].x, ret[0].y ) ).phi;
-        } );
-        if ( min_phi_dot == undefined ) {
-            console.log( 'bbad1' );
-            return ret;
-        }
+        // let min_phi_dot = minBy( sorted_dots, ( a: Dot2d ) => {
+        //     return a.to_polar( new Dot2d( ret[0].x, ret[0].y ) ).phi;
+        // } );
+        // if ( min_phi_dot == undefined ) {
+        //     console.log( 'bbad1' );
+        //     return ret;
+        // }
 
-        ret.push( min_phi_dot );
+        // ret.push( min_phi_dot );
 
-        min_phi_dot = minBy( sorted_dots, ( a: Dot2d ) => {
-            return vect_2d_angle( ret[ret.length - 1], a, ret[ret.length - 2] );
-        } );
-        if ( min_phi_dot == undefined ) {
-            console.log( 'bbad2' );
-            return ret;
-        }
-        while ( min_phi_dot.x != ret[0].x && min_phi_dot.y != ret[0].y ) {
-            ret.push( min_phi_dot );
-            const angles = map( sorted_dots, ( a: Dot2d ) => {
-                if ( a.x == ret[ret.length - 2].x && a.y == ret[ret.length - 2].y ) {
-                    return 100000;
-                }
-                return vect_2d_angle( ret[ret.length - 1], a, ret[ret.length - 2] );
-            } );
-            let min = 10000000; let argmin = -1;
-            for ( let i = 0; i < angles.length; i++ ) {
-                if ( angles[i] < min ) {
-                    min = angles[i];
-                    argmin = i;
-                }
-            }
-            min_phi_dot = sorted_dots[argmin];
-            console.log( angles, sorted_dots );
-            if ( min_phi_dot == undefined ) {
-                console.log( 'bbad3' );
-                return ret;
-            }
-        }
+        // min_phi_dot = minBy( sorted_dots, ( a: Dot2d ) => {
+        //     return vect_2d_angle( ret[ret.length - 1], a, ret[ret.length - 2] );
+        // } );
+        // if ( min_phi_dot == undefined ) {
+        //     console.log( 'bbad2' );
+        //     return ret;
+        // }
+        // while ( min_phi_dot.x != ret[0].x && min_phi_dot.y != ret[0].y ) {
+        //     ret.push( min_phi_dot );
+        //     const angles = map( sorted_dots, ( a: Dot2d ) => {
+        //         if ( a.x == ret[ret.length - 2].x && a.y == ret[ret.length - 2].y ) {
+        //             return 100000;
+        //         }
+        //         return vect_2d_angle( ret[ret.length - 1], a, ret[ret.length - 2] );
+        //     } );
+        //     let min = 10000000; let argmin = -1;
+        //     for ( let i = 0; i < angles.length; i++ ) {
+        //         if ( angles[i] < min ) {
+        //             min = angles[i];
+        //             argmin = i;
+        //         }
+        //     }
+        //     min_phi_dot = sorted_dots[argmin];
+        //     console.log( angles, sorted_dots );
+        //     if ( min_phi_dot == undefined ) {
+        //         console.log( 'bbad3' );
+        //         return ret;
+        //     }
+        // }
 
         return ret;
     }
@@ -221,6 +221,14 @@ export class DotCollection implements SceneElement {
             sorted_dots.shift();
         }
 
+        return ret;
+    }
+
+    to_simple_object (): Array<{x: number, y: number}> {
+        const ret: Array<{x: number, y: number}> = [];
+        for ( const dot of this.dots ) {
+            ret.push( { x: dot.x, y: dot.y } );
+        }
         return ret;
     }
 }

@@ -61,12 +61,12 @@ export class Dot2dQuickFindCollection implements SceneElement {
         } else {
             const rect = left_bot_or_rect as Rectangle;
             lb = new Dot2d(
-                rect.vetex_1.x < rect.vetex_2.x ? rect.vetex_1.x : rect.vetex_2.x,
-                rect.vetex_1.y < rect.vetex_2.y ? rect.vetex_1.y : rect.vetex_2.y,
+                rect.vertex_1.x < rect.vertex_2.x ? rect.vertex_1.x : rect.vertex_2.x,
+                rect.vertex_1.y < rect.vertex_2.y ? rect.vertex_1.y : rect.vertex_2.y,
             );
             rt = new Dot2d(
-                rect.vetex_1.x > rect.vetex_2.x ? rect.vetex_1.x : rect.vetex_2.x,
-                rect.vetex_1.y > rect.vetex_2.y ? rect.vetex_1.y : rect.vetex_2.y,
+                rect.vertex_1.x > rect.vertex_2.x ? rect.vertex_1.x : rect.vertex_2.x,
+                rect.vertex_1.y > rect.vertex_2.y ? rect.vertex_1.y : rect.vertex_2.y,
             );
         }
         const lbx = sortedIndex( this.x_index_sorted, lb.x );
@@ -105,6 +105,14 @@ export class Dot2dQuickFindCollection implements SceneElement {
 
     set_vertex (): void {
         // cannnot move vertexes of this collection
+    }
+
+    to_simple_object (): Array<{x: number, y: number}> {
+        const ret: Array<{x: number, y: number}> = [];
+        for ( const dot of this.dots ) {
+            ret.push( { x: dot.x, y: dot.y } );
+        }
+        return ret;
     }
 }
 
