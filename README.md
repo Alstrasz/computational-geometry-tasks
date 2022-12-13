@@ -23,10 +23,6 @@ Project containing university tasks for computational geometry
 
 # How to run
 
-## With node
-
-Requiers postgres to be launched, setting passed as env variables. See ./docker-compose.yml as example.
-
 For dev
 
 From project's root folder:
