@@ -1,8 +1,6 @@
 const { defineConfig } = require( '@vue/cli-service' );
 module.exports = defineConfig( {
-    transpileDependencies: [
-        'quasar',
-    ],
+    transpileDependencies: ['quasar'],
 
     lintOnSave: false,
 
@@ -12,4 +10,8 @@ module.exports = defineConfig( {
             rtlSupport: false,
         },
     },
+
+    publicPath: process.env.NODE_ENV === 'production' ?
+        '/ computational-geometry-tasks' :
+        '/',
 } );
