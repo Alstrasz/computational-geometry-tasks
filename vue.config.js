@@ -12,6 +12,6 @@ module.exports = defineConfig( {
     },
 
     publicPath: process.env.NODE_ENV === 'production' ?
-        '/ computational-geometry-tasks' :
+        '/computational-geometry-tasks' :
         '/',
 } );
