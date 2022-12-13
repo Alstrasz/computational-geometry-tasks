@@ -63,13 +63,6 @@ let routes: Array<RouteRecordRaw> = [
     },
 ];
 
-routes = routes.map( ( val ) => {
-    val.path = ( __webpack_public_path__ || '/' ) + val.path;
-    return val;
-} );
-
-console.log( __webpack_public_path__ );
-
 const router = createRouter( {
     history: createWebHistory(),
     routes,
