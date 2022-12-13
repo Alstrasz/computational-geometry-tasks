@@ -149,7 +149,7 @@ function remove_known_shape ( name: string ) {
 function save_file () {
     const object_to_save = {
         start: start_dot.to_simple_object(),
-        end: start_dot.to_simple_object(),
+        end: end_dot.to_simple_object(),
         polygons: [] as Array<Array<{x: number, y: number}>>,
     };
     difference( known_shapes.value, reserved_rows.value ).forEach( ( elem ) => {
