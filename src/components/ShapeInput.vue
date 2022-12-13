@@ -87,7 +87,7 @@ const emits = defineEmits<Emits>();
 
 function add_dot_from_mouse_event ( ev: MouseEvent ) {
     const rect = canvas.value.getBoundingClientRect();
-    dots.value.push( new Dot2d( ev.clientX - rect.x, ev.clientY - rect.y ) );
+    dots.value.push( new Dot2d( Math.floor( ev.clientX - rect.x ), Math.floor( ev.clientY - rect.y ) ) );
     draw_dots();
 }
 
