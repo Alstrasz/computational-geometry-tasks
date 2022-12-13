@@ -213,10 +213,21 @@ export class Shape implements SceneElement {
         return ret;
     }
 
-    set_vertex ( vertex_id: number, target: Dot2d ): void {
+    set_vertex ( vertex_id: number, target: Dot2d, move_shape?: boolean ): void {
         if ( vertex_id < 0 || vertex_id >= this.vertices.length ) {
             throw new Error( 'Vertex id out of range' );
         }
+
+        if ( move_shape ) {
+            const diff = target.sub( this.vertices[vertex_id] );
+
+            this.vertices = this.vertices.map( ( dot ) => {
+                return dot.add( diff );
+            } );
+
+            return;
+        }
+
         this.vertices[vertex_id].set( target );
     }
 

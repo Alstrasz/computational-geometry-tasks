@@ -8,12 +8,13 @@ export class Scene {
     private elements: { [name: string]: SceneElement } = {};
     private generated_name_counter = 0;
     /**
-     * Supported events: 'draw'
+     * Supported events: 'draw', 'vertex_moved'
      *
      * @private
      * @memberof CanvasScene
      */
     protected event_emmiter = new EventEmitter();
+    move_shape: boolean = false;
 
     constructor (
         public brush: Brush,
@@ -80,7 +81,7 @@ export class Scene {
 
     move_vertex ( selector: SceneSelectedVertex, to: Dot2d ) {
         if ( this.elements[selector.elem_name] ) {
-            this.elements[selector.elem_name].set_vertex( selector.vertex_id, to );
+            this.elements[selector.elem_name].set_vertex( selector.vertex_id, to, this.move_shape );
             this.event_emmiter.emit( 'vertex_moved', selector, to );
         }
     }

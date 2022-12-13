@@ -58,9 +58,18 @@ export class DotCollection implements SceneElement {
         return ret;
     }
 
-    set_vertex ( vertex_id: number, target: Dot2d ): void {
+    set_vertex ( vertex_id: number, target: Dot2d, move_shape?: boolean ): void {
         if ( vertex_id < 0 || vertex_id >= this.dots.length ) {
             throw new Error( 'Vertex id out of range' );
+        }
+        if ( move_shape ) {
+            const diff = this.dots[vertex_id].sub( target );
+
+            this.dots = this.dots.map( ( dot ) => {
+                return dot.add( diff );
+            } );
+
+            return;
         }
         this.dots[vertex_id].set( target );
     }

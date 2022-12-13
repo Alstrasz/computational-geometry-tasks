@@ -62,7 +62,6 @@ let dot_collection = new Dot2dQuickFindCollection( dt, { r: 255, g: 0, b: 0 } );
 const rect = new Rectangle(
     new Dot2d( Math.floor( CANVAS_W.value / 4 ), Math.floor( CANVAS_H.value / 4 ) ),
     new Dot2d( Math.floor( CANVAS_W.value / 2 ), Math.floor( CANVAS_H.value / 2 ) ),
-    rect_edit_mode.value,
     { r: 0, g: 255, b: 0 },
 );
 
@@ -90,7 +89,9 @@ function set_shape ( dots: Array<Dot2d> ) {
 }
 
 function update_rect_mode () {
-    rect.set_edit_mode( rect_edit_mode.value );
+    if ( scene ) {
+        scene.move_shape = rect_edit_mode.value;
+    }
 }
 
 </script>

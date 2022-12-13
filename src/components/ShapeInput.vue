@@ -6,7 +6,7 @@
         transition-hide="scale"
         @before-hide="reset_dots()"
     >
-        <q-card class="bg-dark text-white">
+        <q-card class="bg-dark text-white" style="max-width: 200vh;">
             <q-card-section>
                 <div class="text-h6">Shape selection</div>
             </q-card-section>
@@ -29,6 +29,34 @@
                 <q-btn flat label="Cancel" color="negative" class="text-capitalize" v-close-popup />
             </q-card-actions>
         </q-card>
+
+        <!-- <q-layout view="Lhh lpR fff" container>
+            <q-header class="bg-primary">
+                <q-toolbar>
+                    <div class="text-h6">Shape selection</div>
+                </q-toolbar>
+            </q-header>
+
+            <q-footer class="bg-black text-white">
+                <q-btn flat label="Submit" color="positive" class="text-capitalize" v-close-popup :disable="dots.length < 3" @click="emit_dots()" />
+                <q-btn flat label="Reset" color="secondary" class="text-capitalize" @click="reset_dots()" />
+                <q-btn flat label="Cancel" color="negative" class="text-capitalize" v-close-popup />
+            </q-footer>
+
+            <q-page-container>
+                <q-page padding>
+                    <div>
+                        <canvas
+                            class="canvas bg-blue-grey-14"
+                            :width="props.canvas_width || 512"
+                            :height="props.canvas_height || 512"
+                            ref="canvas"
+                            @click="add_dot_from_mouse_event($event)"
+                        ></canvas>
+                    </div>
+                </q-page>
+            </q-page-container>
+        </q-layout> -->
     </q-dialog>
 
 </template>

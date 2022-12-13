@@ -8,7 +8,6 @@ export class Rectangle implements SceneElement {
     constructor (
         public vertex_1: Dot2d,
         public vertex_2: Dot2d,
-        private edit_mode: boolean = true,
         public color?: Color,
     ) {}
 
@@ -48,12 +47,12 @@ export class Rectangle implements SceneElement {
         return ret;
     }
 
-    set_vertex ( vertex_id: number, target: Dot2d ): void {
+    set_vertex ( vertex_id: number, target: Dot2d, move_shape?: boolean ): void {
         if ( vertex_id < 0 || vertex_id > 3 ) {
             throw new Error( 'Vertex id out of range' );
         }
 
-        if ( this.edit_mode ) {
+        if ( move_shape ) {
             if ( vertex_id === 0 ) {
                 this.vertex_1.set( target );
             } else if ( vertex_id === 1 ) {
@@ -85,10 +84,6 @@ export class Rectangle implements SceneElement {
 
         this.vertex_1.set( this.vertex_1.add( dv ) );
         this.vertex_2.set( this.vertex_2.add( dv ) );
-    }
-
-    set_edit_mode ( val: boolean ) {
-        this.edit_mode = val;
     }
 
     to_simple_object (): Array<{x: number, y: number}> {
