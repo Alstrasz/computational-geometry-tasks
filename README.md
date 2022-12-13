@@ -11,6 +11,12 @@ Project containing university tasks for computational geometry
 - Random shape
     - Generate random shape by distorting right shape
 
+- Convex hull
+    - Generate convex hull from dots collection
+
+- Multiple shapes editor
+    - Editor for creating and modifying multiple shapes
+
 # Used technologies
 
 - Vue
