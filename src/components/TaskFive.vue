@@ -9,6 +9,7 @@
         <q-card-actions>
             <q-btn color="accent" label="Add shape" class="text-capitalize" @click="input_shape_dialog_active = true" />
             <q-btn color="primary" label="Save to file" class="text-capitalize" @click="save_file()" />
+            <q-btn color="primary" label="Send for graph" class="text-capitalize" @click="request_graph()" />
             <ShapeInput v-model="input_shape_dialog_active" @created:shape="add_shape($event)" :dotst_only="false" :canvas_width="CANVAS_W" :canvas_height="CANVAS_H"></ShapeInput>
         </q-card-actions>
 
@@ -62,8 +63,10 @@ import { onBeforeUnmount, onMounted, Ref, ref } from 'vue';
 import { Dot2d } from '../../lib/geometry_2d/scene_element/dot_2d';
 import ShapeInput from './ShapeInput.vue';
 import { Shape } from '../../lib/geometry_2d/scene_element/shape';
-import { remove, difference } from 'lodash-es';
+import { EdgesCollection } from '../../lib/geometry_2d/scene_element/edges_collection';
+import { remove, difference, map } from 'lodash-es';
 import { saveAs } from 'file-saver';
+import axios from 'axios';
 
 const canvas = ref<HTMLCanvasElement>( null as never );
 let scene: CanvasScene | undefined = undefined;
@@ -131,6 +134,7 @@ onBeforeUnmount( () => {
 
 function add_shape ( dots: Array<Dot2d> ) {
     const shape = new Shape( dots );
+    shape.lineWidth = 4;
     const shape_name = 'shape_' + shape_counter;
     scene?.add_element( shape, shape_name );
     known_shapes.value.push( shape_name );
@@ -146,15 +150,22 @@ function remove_known_shape ( name: string ) {
     } );
 }
 
-function save_file () {
+function get_shapes_simple () {
     const object_to_save = {
         start: start_dot.to_simple_object(),
         end: end_dot.to_simple_object(),
         polygons: [] as Array<Array<{x: number, y: number}>>,
     };
     difference( known_shapes.value, reserved_rows.value ).forEach( ( elem ) => {
-        object_to_save.polygons.push( scene?.get_element( elem ).to_simple_object() as Array<{x: number, y: number}> );
+        if ( elem.startsWith( 'shape' ) ) {
+            object_to_save.polygons.push( scene?.get_element( elem ).to_simple_object() as Array<{x: number, y: number}> );
+        }
     } );
+    return object_to_save;
+}
+
+function save_file () {
+    const object_to_save = get_shapes_simple();
 
     const string_to_save = JSON.stringify( object_to_save );
 
@@ -165,5 +176,38 @@ function update_move_shape () {
     if ( scene ) {
         scene.move_shape = move_shape.value;
     }
+}
+
+function parse_graph ( graph: {nodes: Array<{x: number, y:number}>, neighbors: {[key: string]: Array<number>}} ): EdgesCollection {
+    const edges: Array<[Dot2d, Dot2d]> = [];
+    const dots: Array<Dot2d> = map( graph.nodes, ( elem ) => {
+        return new Dot2d( elem.x, elem.y );
+    } );
+    // eslint-disable-next-line guard-for-in
+    for ( const prop in graph.neighbors ) {
+        const id = parseInt( prop );
+        for ( const key of graph.neighbors[prop] ) {
+            edges.push( [dots[key], dots[id]] );
+        }
+    }
+    return new EdgesCollection( edges, { r: 127, g: 127, b: 127 } );
+}
+
+function add_graph ( graph: {nodes: Array<{x: number, y:number}>, neighbors: {[key: string]: Array<number>}} ) {
+    const shape = parse_graph( graph );
+    const shape_name = 'graph_' + shape_counter;
+    scene?.add_element( shape, shape_name );
+    known_shapes.value.push( shape_name );
+    shape_counter += 1;
+}
+
+function request_graph () {
+    const shapes = get_shapes_simple();
+    const req = shapes.polygons;
+    req.unshift( [shapes.start] );
+    req.push( [shapes.end] );
+    axios.post( 'https://p.a6raywa1cher.com/vgf/visibility', req ).then( ( res ) => {
+        add_graph( res.data );
+    } );
 }
 </script>

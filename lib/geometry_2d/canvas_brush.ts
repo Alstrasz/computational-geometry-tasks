@@ -9,10 +9,10 @@ export class CanvasBrush implements Brush {
         private height: number,
     ) {}
 
-    draw_line ( from: Dot2d, to: Dot2d, color?: Color | undefined ): void {
+    draw_line ( from: Dot2d, to: Dot2d, color?: Color | undefined, lineWidth: number = 2 ): void {
         this.context.strokeStyle = this.color_type_to_string( color || { r: 0, g: 0, b: 255 } );
         this.context.beginPath();
-        this.context.lineWidth = 2;
+        this.context.lineWidth = lineWidth;
         this.context.moveTo( Math.round( from.x ), Math.round( from.y ) );
         this.context.lineTo( Math.round( to.x ), Math.round( to.y ) );
         this.context.closePath();

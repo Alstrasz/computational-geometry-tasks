@@ -9,6 +9,7 @@ export class Shape implements SceneElement {
     private vertices!: Array<Dot2d>;
     public color: Color;
     public interactive: boolean = true;
+    public lineWidth: number = 2;
 
 
     constructor( vertices: Array<Dot2d>, color?: Color );
@@ -31,7 +32,7 @@ export class Shape implements SceneElement {
     draw ( brush: Brush ) {
         const neg_color: Color = { r: 255 - this.color.r, g: 255 - this.color.g, b: 255 - this.color?.b };
         for ( let i = 0; i < this.vertices.length; i ++ ) {
-            brush.draw_line( this.vertices[i], this.vertices[( i + 1 ) % this.vertices.length], this.color );
+            brush.draw_line( this.vertices[i], this.vertices[( i + 1 ) % this.vertices.length], this.color, this.lineWidth );
             brush.draw_point( this.vertices[i], neg_color );
         }
     }
