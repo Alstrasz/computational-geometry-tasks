@@ -6,5 +6,7 @@ export abstract class Brush {
 
     abstract draw_point ( pos: Dot2d, color?: Color ): void;
 
+    abstract draw_circle ( center: Dot2d, radius: number, color?: Color, lineWidth?: number ): void;
+
     abstract fill_all ( color: Color ): void;
 }

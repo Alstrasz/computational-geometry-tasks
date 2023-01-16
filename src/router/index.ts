@@ -30,7 +30,7 @@ for ( const prop in known_routes ) {
 
 console.log( known_routes );
 
-let routes: Array<RouteRecordRaw> = [
+const routes: Array<RouteRecordRaw> = [
     {
         path: known_routes.home,
         name: 'home',

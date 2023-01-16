@@ -48,13 +48,14 @@ import { Shape } from '../../lib/geometry_2d/scene_element/shape';
 import { Dot2d } from '../../lib/geometry_2d/scene_element/dot_2d';
 import ShapeInput from './ShapeInput.vue';
 import { DotCollection } from '../../lib/geometry_2d/scene_element/dot_collection';
+import { Circle } from '../../lib/geometry_2d/scene_element/circle';
 
 const canvas = ref<HTMLCanvasElement>( null as never );
 const input_shape_dialog_active = ref( false );
 let scene: CanvasScene | undefined = undefined;
 
 
-const convex_hull_mode_options: Array<{label: string, value: Parameters<DotCollection['convex_shape']>['0'] }> = [
+const convex_hull_mode_options: Array<{label: string, value: Parameters<DotCollection['convex_shape']>['0'] | 'circle' }> = [
     {
         label: 'n4',
         value: 'n4',
@@ -66,6 +67,10 @@ const convex_hull_mode_options: Array<{label: string, value: Parameters<DotColle
     {
         label: 'nlogn',
         value: 'nlogn',
+    },
+    {
+        label: 'circle',
+        value: 'circle',
     },
 ];
 const convex_hull_mode: Ref<typeof convex_hull_mode_options[0]> = ref( convex_hull_mode_options[0] );
@@ -133,7 +138,13 @@ function regenerate_shape () {
 
 function update_convex_hull () {
     scene?.remove_element( 'convex_hull' );
-    const shape = new Shape( dots_collection.convex_shape( convex_hull_mode.value.value ) );
+    let shape: Circle | Shape;
+    if ( convex_hull_mode.value.value == 'circle' ) {
+        const circle_data = dots_collection.convex_circle();
+        shape = new Circle( circle_data.center, circle_data.radius, { r: 0, g: 0, b: 255 } );
+    } else {
+        shape = new Shape( dots_collection.convex_shape( convex_hull_mode.value.value ) );
+    }
     shape.interactive = false;
     scene?.add_element( shape, 'convex_hull' );
 }

@@ -4,7 +4,7 @@ import { Color } from '../types/color';
 import { Dot2d } from './dot_2d';
 import { Shape } from './shape';
 import { cloneDeep, minBy, map, min } from 'lodash-es';
-import { vect_2d_angle, vect_2d_mult } from '../helpers';
+import { bin_search, get_circle_centers, vect_2d_angle, vect_2d_mult } from '../helpers';
 
 
 export class DotCollection implements SceneElement {
@@ -231,6 +231,75 @@ export class DotCollection implements SceneElement {
         }
 
         return ret;
+    }
+
+    convex_circle () {
+        let min_x = this.dots[0].x;
+        let max_x = min_x;
+        let min_y = this.dots[0].y;
+        let max_y = min_y;
+        for ( const dot of this.dots ) {
+            min_x = min_x < dot.x ? min_x : dot.x;
+            max_x = max_x > dot.x ? max_x : dot.x;
+            min_y = min_y < dot.y ? min_y : dot.y;
+            max_y = max_y > dot.y ? max_y : dot.y;
+        }
+        const max_rad = max_x - min_x + max_y - min_y;
+        const res = {
+            dot_1: this.dots[0],
+            dot_2: this.dots[1],
+            radius: max_rad,
+        };
+
+        for ( let i = 0; i < this.dots.length; i++ ) {
+            for ( let j = 0; j < this.dots.length; j++ ) {
+                if ( i == j ) {
+                    // continue;
+                }
+                const dot_1 = this.dots[i];
+                const dot_2 = this.dots[j];
+                const rad = bin_search( 1, res.radius, ( m: number ) => {
+                    const centers = get_circle_centers( dot_1, dot_2, max_rad );
+                    let check_1 = true;
+                    let check_2 = true;
+                    for ( let k = 0; k < this.dots.length; k++ ) {
+                        if ( k == i || k == j ) {
+                            continue;
+                        }
+                        const inner_dot = this.dots[k];
+                        if ( inner_dot.distance_to( centers[0] ) > m) {
+                            check_1 = false;
+                        }
+                        if ( inner_dot.distance_to( centers[1] ) > m) {
+                            check_2 = false;
+                        }
+                    }
+                    return check_1 || check_2;
+                } );
+                if ( rad < res.radius ) {
+                    res.radius = rad;
+                    res.dot_1 = dot_1;
+                    res.dot_2 = dot_2;
+                }
+            }
+        }
+
+        const centers = get_circle_centers( res.dot_1, res.dot_2, res.radius );
+
+        // console.log( res.dot_1, res.dot_2, centers, res.radius, max_rad );
+
+        let check = true;
+
+        for ( const inner_dot of this.dots ) {
+            if ( inner_dot.distance_to( centers[0] ) > res.radius * 1.1) {
+                check = false;
+            }
+        }
+
+        return {
+            center: check ? centers[0] : centers[1],
+            radius: res.radius,
+        };
     }
 
     to_simple_object (): Array<{x: number, y: number}> {

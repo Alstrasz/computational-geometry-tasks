@@ -1,6 +1,7 @@
 import { Dot2d } from './scene_element/dot_2d';
 import { Brush } from './interfaces/brush';
 import { Color } from './types/color';
+import { TouchSwipe } from 'quasar';
 
 export class CanvasBrush implements Brush {
     constructor (
@@ -22,6 +23,15 @@ export class CanvasBrush implements Brush {
     draw_point ( pos: Dot2d, color?: Color | undefined ): void {
         this.context.fillStyle = this.color_type_to_string( color || { r: 0, g: 255, b: 0 } );
         this.context.fillRect( Math.round( pos.x ) - 1, Math.round( pos.y ) - 1, 3, 3 );
+    }
+
+    draw_circle ( center: Dot2d, radius: number, color?: Color | undefined, lineWidth: number = 2 ): void {
+        this.context.beginPath();
+        this.context.strokeStyle = this.color_type_to_string( color || { r: 255, g: 0, b: 0 } );
+        this.context.lineWidth = lineWidth;
+        this.context.arc( center.x, center.y, radius, 0, 2 * Math.PI, false );
+        this.context.closePath();
+        this.context.stroke();
     }
 
     fill_all ( color: Color ): void {

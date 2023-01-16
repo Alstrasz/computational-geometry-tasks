@@ -63,3 +63,49 @@ export function vect_2d_angle ( a: Dot2d, b: Dot2d, origin: Dot2d = new Dot2d( 0
 
     return Math.acos( vect_2d_dot_product( a, b ) / vect_2d_length( a ) / vect_2d_length( b ) );
 }
+
+export function get_circle_centers ( dot_1: Dot2d, dot_2: Dot2d, r: number ): [Dot2d, Dot2d] {
+    const q = Math.sqrt(
+        ( dot_2.x - dot_1.x ) * ( dot_2.x - dot_1.x ) +
+        ( dot_2.y - dot_1.y ) * ( dot_2.y - dot_1.y ),
+    );
+
+    const x3 = ( dot_1.x + dot_2.x ) / 2;
+    const y3 = ( dot_1.y + dot_2.y ) / 2;
+
+    const base_x = Math.sqrt( r * r - ( q / 2 ) * ( q / 2 ) ) * ( dot_1.y - dot_2.y ) / q;
+    const base_y = Math.sqrt( r * r - ( q / 2 ) * ( q / 2 ) ) * ( dot_2.x - dot_1.x ) / q;
+
+    if ( isNaN( base_x ) || isNaN( base_y ) ) {
+        return [dot_1, dot_2];
+    }
+
+    return [
+        new Dot2d( Math.round( x3 + base_x ), Math.round( y3 + base_y ) ),
+        new Dot2d( Math.round( x3 - base_x ), Math.round( y3 - base_y ) ),
+    ];
+}
+
+export function bin_search ( l: number, r: number, check: ( m: number ) => boolean ) {
+    let m = Math.floor( ( r + l ) / 2 );
+    while ( l < r ) {
+        m = Math.floor( ( r + l ) / 2 );
+        // console.log( l, r );
+        if ( check( m ) ) {
+            r = m;
+        } else {
+            l = m + 1;
+        }
+    }
+    return l;
+}
+
+// export function bin_search ( l: number, r: number, check: ( m: number ) => boolean ) {
+//     for ( ; l < r; l++ ) {
+//         if ( check( l ) ) {
+//             console.log( 'bbbb' );
+//             break;
+//         }
+//     }
+//     return l;
+// }
