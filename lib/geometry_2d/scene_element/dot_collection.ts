@@ -3,7 +3,7 @@ import { SceneElement } from '../interfaces/scene_element';
 import { Color } from '../types/color';
 import { Dot2d } from './dot_2d';
 import { Shape } from './shape';
-import { cloneDeep, minBy, map, min } from 'lodash-es';
+import { cloneDeep, minBy, map, min, result } from 'lodash-es';
 import { bin_search, get_circle_centers, vect_2d_angle, vect_2d_mult } from '../helpers';
 
 
@@ -85,7 +85,7 @@ export class DotCollection implements SceneElement {
         case 'n4':
             return this.convex_shape_n4();
         case 'n2':
-            return this.convex_shape_n2();
+            return this.convex_shape_nlogn();
         case 'nlogn':
             return this.convex_shape_nlogn();
         default:
@@ -142,58 +142,56 @@ export class DotCollection implements SceneElement {
     convex_shape_n2 (): Array<Dot2d> {
         const ret: Array<Dot2d> = [];
 
-        const sorted_dots = cloneDeep( this.dots );
+        let first_min_dot_id = 0;
 
-        let max_y = 0;
-        sorted_dots.forEach( ( dot ) => {
-            max_y = max_y > dot.y ? max_y : dot.y;
-        } );
+        for ( let i = 0; i < this.dots.length; i++ ) {
+            if ( this.dots[i].y < this.dots[first_min_dot_id].y ) {
+                first_min_dot_id = i;
+            }
+            if ( this.dots[i].y == this.dots[first_min_dot_id].y && this.dots[i].x < this.dots[first_min_dot_id].x ) {
+                first_min_dot_id = i;
+            }
+        }
 
-        sorted_dots.sort( ( a: Dot2d, b: Dot2d ) => {
-            return a.x * max_y + a.y - b.x * max_y + b.y;
-        } );
+        console.log( this.dots, first_min_dot_id );
 
-        ret.push( sorted_dots[0] );
+        ret.push( this.dots[first_min_dot_id] );
 
-        // let min_phi_dot = minBy( sorted_dots, ( a: Dot2d ) => {
-        //     return a.to_polar( new Dot2d( ret[0].x, ret[0].y ) ).phi;
-        // } );
-        // if ( min_phi_dot == undefined ) {
-        //     console.log( 'bbad1' );
-        //     return ret;
-        // }
+        const reserved_dots: Array<boolean> = [];
+        reserved_dots.length = this.dots.length;
+        reserved_dots.fill( false );
 
-        // ret.push( min_phi_dot );
+        const get_min_dot_id = ( a: Dot2d, b: Dot2d ) => {
+            let min_dot_id = -1;
+            let min_angle = 40;
+            for ( let i = 0; i < this.dots.length; i++ ) {
+                if ( reserved_dots[i] ) {
+                    continue;
+                }
+                const angle = vect_2d_angle( b, this.dots[i], a );
+                // console.log( angle );
+                if ( angle < min_angle ) {
+                    min_dot_id = i;
+                    min_angle = angle;
+                }
+            }
+            return min_dot_id;
+        };
 
-        // min_phi_dot = minBy( sorted_dots, ( a: Dot2d ) => {
-        //     return vect_2d_angle( ret[ret.length - 1], a, ret[ret.length - 2] );
-        // } );
-        // if ( min_phi_dot == undefined ) {
-        //     console.log( 'bbad2' );
-        //     return ret;
-        // }
-        // while ( min_phi_dot.x != ret[0].x && min_phi_dot.y != ret[0].y ) {
-        //     ret.push( min_phi_dot );
-        //     const angles = map( sorted_dots, ( a: Dot2d ) => {
-        //         if ( a.x == ret[ret.length - 2].x && a.y == ret[ret.length - 2].y ) {
-        //             return 100000;
-        //         }
-        //         return vect_2d_angle( ret[ret.length - 1], a, ret[ret.length - 2] );
-        //     } );
-        //     let min = 10000000; let argmin = -1;
-        //     for ( let i = 0; i < angles.length; i++ ) {
-        //         if ( angles[i] < min ) {
-        //             min = angles[i];
-        //             argmin = i;
-        //         }
-        //     }
-        //     min_phi_dot = sorted_dots[argmin];
-        //     console.log( angles, sorted_dots );
-        //     if ( min_phi_dot == undefined ) {
-        //         console.log( 'bbad3' );
-        //         return ret;
-        //     }
-        // }
+        let min_dot_id = get_min_dot_id( ret[0], new Dot2d( ret[0].x + 100, ret[0].y ) );
+
+        ret.push( this.dots[min_dot_id] );
+        reserved_dots[min_dot_id] = true;
+
+        while ( true ) {
+            min_dot_id = get_min_dot_id( ret[ret.length - 2], ret[ret.length - 1] );
+            console.log( min_dot_id, first_min_dot_id );
+            if ( min_dot_id == first_min_dot_id ) {
+                break;
+            }
+            reserved_dots[min_dot_id] = true;
+            ret.push( this.dots[min_dot_id] );
+        }
 
         return ret;
     }
@@ -267,10 +265,10 @@ export class DotCollection implements SceneElement {
                             continue;
                         }
                         const inner_dot = this.dots[k];
-                        if ( inner_dot.distance_to( centers[0] ) > m) {
+                        if ( inner_dot.distance_to( centers[0] ) > m ) {
                             check_1 = false;
                         }
-                        if ( inner_dot.distance_to( centers[1] ) > m) {
+                        if ( inner_dot.distance_to( centers[1] ) > m ) {
                             check_2 = false;
                         }
                     }
@@ -291,7 +289,7 @@ export class DotCollection implements SceneElement {
         let check = true;
 
         for ( const inner_dot of this.dots ) {
-            if ( inner_dot.distance_to( centers[0] ) > res.radius * 1.1) {
+            if ( inner_dot.distance_to( centers[0] ) > res.radius * 1.1 ) {
                 check = false;
             }
         }

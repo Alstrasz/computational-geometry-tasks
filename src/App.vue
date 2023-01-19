@@ -79,6 +79,15 @@
                         <q-item-label caption class="text-white">Multiple shapes editor</q-item-label>
                     </q-item-section>
                 </q-item>
+                <q-item clickable tag="a" :to="known_routes.task6" active-class="text-accent">
+                    <q-item-section avatar>
+                        <q-icon name="task6" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label>Task #6</q-item-label>
+                        <q-item-label caption class="text-white">Lines</q-item-label>
+                    </q-item-section>
+                </q-item>
             </q-list>
         </q-drawer>
 

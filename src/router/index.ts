@@ -8,6 +8,7 @@ export const known_routes: {[key:string]: string} = {
     task3: '/task3',
     task4: '/task4',
     task5: '/task5',
+    task6: '/task6',
 };
 
 // eslint-disable-next-line guard-for-in
@@ -60,6 +61,11 @@ const routes: Array<RouteRecordRaw> = [
         path: known_routes.task5,
         name: 'task5',
         component: () => import( /* webpackChunkName: "about" */ '../views/TaskFiveView.vue' ),
+    },
+    {
+        path: known_routes.task6,
+        name: 'task6',
+        component: () => import( /* webpackChunkName: "about" */ '../views/TaskSixView.vue' ),
     },
 ];
 
